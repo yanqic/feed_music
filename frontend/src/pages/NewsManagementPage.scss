@@ -1,0 +1,121 @@
+@import '../assets/styles/variables';
+
+.news-management-page {
+  padding: 80px $spacing-lg $spacing-xl;
+  max-width: 800px;
+  margin: 0 auto;
+  
+  h1, h2 {
+    text-align: center;
+    margin: $spacing-lg 0;
+    color: $primary-color;
+  }
+  
+  .news-form {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: $spacing-lg;
+    margin-bottom: $spacing-xl;
+    
+    .form-group {
+      margin-bottom: $spacing-md;
+      
+      label {
+        display: block;
+        margin-bottom: $spacing-xs;
+        font-weight: bold;
+        color: $text-color;
+      }
+      
+      input, textarea {
+        width: 100%;
+        padding: $spacing-sm;
+        border: 1px solid $border-color;
+        border-radius: 4px;
+        font-size: $font-size-normal;
+        
+        &:focus {
+          outline: none;
+          border-color: $primary-color;
+          box-shadow: 0 0 0 2px rgba($primary-color, 0.2);
+        }
+      }
+      
+      textarea {
+        min-height: 100px;
+        resize: vertical;
+      }
+    }
+    
+    .form-actions {
+      display: flex;
+      justify-content: space-between;
+      
+      button {
+        padding: $spacing-sm $spacing-lg;
+        
+        &:last-child {
+          background-color: #f44336;
+          
+          &:hover {
+            background-color: darken(#f44336, 10%);
+          }
+        }
+      }
+    }
+  }
+  
+  .news-list {
+    .news-item {
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      padding: $spacing-md;
+      margin-bottom: $spacing-md;
+      
+      h3 {
+        margin-bottom: $spacing-sm;
+        color: $text-color;
+      }
+      
+      p {
+        color: $light-text-color;
+        margin-bottom: $spacing-md;
+      }
+      
+      .news-actions {
+        display: flex;
+        justify-content: flex-end;
+        
+        button {
+          margin-left: $spacing-sm;
+          padding: $spacing-xs $spacing-sm;
+          font-size: $font-size-small;
+          
+          &:last-child {
+            background-color: #f44336;
+            
+            &:hover {
+              background-color: darken(#f44336, 10%);
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: $breakpoint-md) {
+  .news-management-page {
+    padding: 80px $spacing-md $spacing-lg;
+    
+    .form-actions {
+      flex-direction: column;
+      
+      button {
+        margin-bottom: $spacing-sm;
+      }
+    }
+  }
+}

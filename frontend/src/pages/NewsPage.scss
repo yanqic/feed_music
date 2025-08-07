@@ -1,0 +1,38 @@
+@import '../assets/styles/variables';
+
+.news-container {
+  background-color: #320d7f;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.news-page {
+  padding: 0 $spacing-lg;
+  max-width: 1200px;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  
+  h1 {
+    text-align: center;
+    margin: 0 0 $spacing-xl 0;
+    color: $primary-color;
+    font-size: $font-size-xxlarge;
+  }
+}
+
+@media (max-width: $breakpoint-md) {
+  .news-page {
+    padding: 0 $spacing-md;
+    
+    h1 {
+      font-size: $font-size-xlarge;
+      margin: 0 0 $spacing-lg 0;
+    }
+  }
+}

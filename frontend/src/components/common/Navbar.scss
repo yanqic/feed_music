@@ -1,0 +1,193 @@
+@import '../../assets/styles/variables';
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: $spacing-md $spacing-lg;
+  color: white;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  
+  .navbar-logo {
+    a {
+      color: white;
+      font-size: $font-size-large;
+      font-weight: bold;
+      text-decoration: none;
+    }
+  }
+  
+  .navbar-sections {
+    display: flex;
+    align-items: center;
+    position: relative;
+    
+    .navbar-section {
+      background: none;
+      border: none;
+      color: white;
+      padding: $spacing-sm $spacing-md;
+      margin: 0 $spacing-sm;
+      font-size: $font-size-normal;
+      cursor: pointer;
+      position: relative;
+      text-transform: uppercase;
+      
+      &.active {
+        font-weight: bold;
+        
+        &:after {
+          content: '';
+          position: absolute;
+          bottom: 0px;
+          left: 0;
+          width: 100%;
+          height: 5px;
+          background-color: white;
+        }
+      }
+      
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+      }
+      
+      .progress-border {
+        position: absolute;
+        height: 5px;
+        background-color: #b3b3b3;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        z-index: 1;
+        
+        .progress-border-bar {
+          position: absolute;
+          top: 0;
+          left: 0;
+          height: 100%;
+          background: #ffffff;
+          transition: width 0.3s ease;
+          z-index: 2;
+        }
+      }
+    }
+    
+  }
+  
+  .navbar-auth {
+    display: flex;
+    align-items: center;
+    
+    .username {
+      margin-right: $spacing-md;
+      font-size: $font-size-normal;
+    }
+    
+    .login-button, .manage-link {
+      color: white;
+      text-decoration: none;
+      margin-right: $spacing-md;
+      text-transform: uppercase;
+      
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+    
+    .logout-button {
+      background-color: transparent;
+      border: 1px solid white;
+      color: white;
+      padding: $spacing-xs $spacing-sm;
+      
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+      }
+    }
+  }
+}
+
+@media (max-width: $breakpoint-md) {
+  .navbar {
+    flex-direction: row; /* 保持水平排列 */
+    flex-wrap: wrap; /* 允许在需要时换行 */
+    padding: $spacing-sm $spacing-md;
+    align-items: center;
+    
+    .navbar-logo {
+      width: auto;
+      margin-bottom: 0;
+      flex: 0 0 auto; /* 不伸缩，保持原始大小 */
+    }
+    
+    .navbar-sections {
+      flex: 1 1 auto; /* 可伸缩，占据剩余空间 */
+      justify-content: flex-end; /* 靠右对齐 */
+      margin: 0 $spacing-md;
+      overflow-x: auto; /* 允许水平滚动 */
+      -webkit-overflow-scrolling: touch; /* 提升移动端滚动体验 */
+      white-space: nowrap; /* 防止内容换行 */
+      
+      &::-webkit-scrollbar {
+        display: none; /* 隐藏滚动条 */
+      }
+      
+      .navbar-section {
+        padding: $spacing-xs $spacing-sm;
+        margin: 0 $spacing-xs;
+        font-size: $font-size-small;
+      }
+    }
+    
+    .navbar-auth {
+      flex: 0 0 auto; /* 不伸缩，保持原始大小 */
+      justify-content: flex-end;
+      margin-bottom: 0;
+      
+      .username {
+        display: none; /* 在移动端隐藏用户名 */
+      }
+      
+      .login-button, .manage-link {
+        margin-right: $spacing-sm;
+        font-size: $font-size-small;
+      }
+      
+      .logout-button {
+        padding: $spacing-xs $spacing-sm;
+        font-size: $font-size-small;
+      }
+    }
+  }
+}
+
+/* 小屏幕手机 */
+@media (max-width: $breakpoint-sm) {
+  .navbar {
+    padding: $spacing-xs $spacing-sm;
+    
+    .navbar-logo a {
+      font-size: $font-size-normal;
+    }
+    
+    .navbar-sections {
+      margin: 0 $spacing-sm;
+      
+      .navbar-section {
+        padding: $spacing-xs $spacing-xs;
+        margin: 0 $spacing-xs;
+        font-size: $font-size-small;
+      }
+    }
+    
+    .navbar-auth {
+      .login-button, .manage-link, .logout-button {
+        font-size: $font-size-small;
+      }
+    }
+  }
+}

@@ -1,0 +1,224 @@
+.scroll-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  z-index: 10;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  perspective: 1200px; /* 增强透视效果 */
+
+  &__line {
+    font-size: 56px; /* 增大PC端字体大小 */
+    font-weight: 300;
+    color: #ffffff;
+    line-height: 1.3;
+    margin: 10px 0;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+    transition: all 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
+    will-change: transform, opacity;
+    letter-spacing: 0.5px; /* 增加字间距 */
+    
+    &.author {
+      font-size: 42px; /* 增大作者字体 */
+      font-style: italic;
+      opacity: 0.8;
+      text-align: right;
+      margin-right: 20%;
+      margin-top: 0;
+      margin-bottom: 20px;
+    }
+  }
+
+  /* 滚动指示器样式 */
+  .scroll-down {
+    position: absolute;
+    bottom: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: #ffffff;
+    font-size: 14px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    opacity: 1;
+    transition: opacity 0.5s ease;
+    
+    .icon {
+      display: block;
+      width: 30px;
+      height: 50px;
+      margin: 0 auto 20px;
+      border: 2px solid #ffffff;
+      border-radius: 25px;
+      position: relative;
+      
+      &::before {
+        content: '';
+        position: absolute;
+        top: 8px;
+        left: 50%;
+        width: 6px;
+        height: 6px;
+        background-color: #ffffff;
+        border-radius: 50%;
+        transform: translateX(-50%);
+        animation: scrollWheel 2s infinite;
+      }
+    }
+    
+    span {
+      opacity: 0.8;
+    }
+  }
+  
+  .starwars-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transform-style: preserve-3d;
+    
+    p {
+      width: 100%;
+      white-space: normal;
+      margin: 5px 0;
+      text-align: center;
+      position: relative;
+    }
+  }
+}
+
+/* 添加动画关键帧 */
+@keyframes scrollWheel {
+  0% {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(-50%) translateY(20px);
+    opacity: 0;
+  }
+}
+
+/* 平板设备 */
+@media (max-width: 992px) {
+  .scroll-text {
+    width: 90%;
+    perspective: 1000px;
+    
+    &__line {
+      font-size: 42px; /* 平板设备字体大小 */
+      line-height: 1.3;
+      margin: 8px 0;
+      letter-spacing: 0.3px;
+      
+      &.author {
+        font-size: 32px;
+      }
+    }
+    
+    .scroll-down {
+      bottom: 5%;
+      font-size: 12px;
+      
+      .icon {
+        width: 25px;
+        height: 40px;
+        margin-bottom: 15px;
+        
+        &::before {
+          width: 5px;
+          height: 5px;
+        }
+      }
+    }
+  }
+}
+
+/* 手机设备 - 中等尺寸 */
+@media (max-width: 768px) {
+  .scroll-text {
+    width: 92%;
+    perspective: 800px;
+    
+    &__line {
+      font-size: 36px; /* 中等手机设备字体大小 */
+      line-height: 1.25;
+      margin: 6px 0;
+      
+      &.author {
+        font-size: 26px;
+        margin-right: 15%;
+      }
+    }
+    
+    .starwars-wrapper {
+      p {
+        margin: 4px 0;
+      }
+    }
+  }
+}
+
+/* 手机设备 - 小尺寸 */
+@media (max-width: 480px) {
+  .scroll-text {
+    width: 95%;
+    perspective: 600px;
+    
+    &__line {
+      font-size: 28px; /* 小型手机设备字体大小 */
+      line-height: 1.2;
+      margin: 5px 0;
+      letter-spacing: 0.2px;
+      
+      &.author {
+        font-size: 20px;
+        margin-right: 10%;
+      }
+    }
+    
+    .scroll-indicator {
+      bottom: 3%;
+      font-size: 12px;
+      
+      &__arrow {
+        width: 12px;
+        height: 12px;
+      }
+    }
+    
+    .starwars-wrapper {
+      p {
+        margin: 3px 0;
+      }
+    }
+  }
+}
+
+/* 超小屏幕设备 */
+@media (max-width: 360px) {
+  .scroll-text {
+    &__line {
+      font-size: 24px; /* 超小型手机设备字体大小 */
+      
+      &.author {
+        font-size: 18px;
+      }
+    }
+  }
+}
