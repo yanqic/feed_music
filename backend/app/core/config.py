@@ -17,16 +17,11 @@ class Settings(BaseSettings):
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
     
-    # 数据库配置
-    POSTGRES_URL: str = "postgresql://username:password@localhost:5432/feed_music_db"
-    
     # Supabase配置
     SUPABASE_URL: str = "https://your-project.supabase.co"
     SUPABASE_KEY: str = "your-anon-key"
     
-    def get_database_url(self) -> str:
-        """获取数据库URL"""
-        return self.POSTGRES_URL
+
     
     # CORS配置
     BACKEND_CORS_ORIGINS: str = "http://localhost:3000,http://localhost:8080"
@@ -39,6 +34,9 @@ class Settings(BaseSettings):
     # 日志配置
     LOG_LEVEL: str = "INFO"
     LOG_FORMAT: str = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    
+    # Vercel 环境标识
+    VERCEL: Optional[str] = None
     
     def get_cors_origins(self) -> List[str]:
         """获取CORS源列表"""

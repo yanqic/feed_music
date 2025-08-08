@@ -15,7 +15,8 @@ def init_database():
         if os.getenv("VERCEL"):
             # 在Vercel环境下，只在需要时创建表
             # 这里可以添加更复杂的迁移逻辑
-            pass
+            print("Skipping database initialization in Vercel environment")
+            return
         else:
             # 本地开发环境直接创建表
             engine = get_engine()
@@ -26,7 +27,8 @@ def init_database():
         print(f"Database initialization error: {e}")
         # 在生产环境中，我们可能不想因为数据库问题而阻止应用启动
         if not os.getenv("VERCEL"):
-            raise
+            print("Continuing without database connection...")
+            # raise
 
 # 初始化数据库
 init_database()

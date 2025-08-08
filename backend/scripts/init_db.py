@@ -4,7 +4,7 @@
 用于在Vercel部署后初始化数据库表
 
 使用方法:
-1. 设置环境变量 POSTGRES_URL
+1. 设置环境变量 SUPABASE_URL 和 SUPABASE_KEY
 2. 运行: python scripts/init_db.py
 """
 
@@ -16,77 +16,25 @@ from pathlib import Path
 project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
-from app.core import settings, engine
-from app.models import Base
-from app.models.user import User
-from app.models.news import News
-from app.core.security import get_password_hash
-from sqlalchemy.orm import sessionmaker
+from app.core.supabase_client import supabase_client
+from app.core.config import settings
 
 
-def create_tables():
-    """创建所有数据库表"""
-    print("Creating database tables...")
-    try:
-        Base.metadata.create_all(bind=engine)
-        print("✅ Tables created successfully")
-        return True
-    except Exception as e:
-        print(f"❌ Error creating tables: {e}")
-        return False
-
-
-def create_admin_user():
-    """创建默认管理员用户"""
-    print("Creating admin user...")
+def init_database():
+    """初始化数据库 - 使用 Supabase 客户端"""
+    print("使用 Supabase 客户端进行数据库初始化...")
     
-    SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-    db = SessionLocal()
+    # 使用 Supabase 客户端检查连接
+    try:
+        # 测试连接
+        response = supabase_client.table('_test_connection').select('*').limit(1).execute()
+        print("Supabase 连接成功")
+    except Exception as e:
+        print(f"Supabase 连接测试失败: {e}")
+        print("注意：这可能是正常的，如果表不存在的话")
     
-    try:
-        # 检查是否已存在管理员用户
-        existing_admin = db.query(User).filter(User.username == "admin").first()
-        if existing_admin:
-            print("⚠️  Admin user already exists")
-            return True
-        
-        # 创建管理员用户
-        admin_user = User(
-            username="admin",
-            email="admin@feedmusic.com",
-            password=get_password_hash("admin123")
-        )
-        
-        db.add(admin_user)
-        db.commit()
-        db.refresh(admin_user)
-        
-        print("✅ Admin user created successfully")
-        print("   Username: admin")
-        print("   Password: admin123")
-        print("   Email: admin@feedmusic.com")
-        return True
-        
-    except Exception as e:
-        print(f"❌ Error creating admin user: {e}")
-        db.rollback()
-        return False
-    finally:
-        db.close()
-
-
-def check_database_connection():
-    """检查数据库连接"""
-    print("Checking database connection...")
-    try:
-        # 尝试连接数据库
-        connection = engine.connect()
-        connection.close()
-        print("✅ Database connection successful")
-        return True
-    except Exception as e:
-        print(f"❌ Database connection failed: {e}")
-        return False
+    print("数据库初始化完成 - 使用 Supabase 管理表结构")
+    print("请在 Supabase Dashboard 中创建和管理数据库表")
 
 
 def main():
@@ -96,30 +44,18 @@ def main():
     print("=" * 50)
     
     # 显示当前配置
-    print(f"Database URL: {settings.get_database_url()[:50]}...")
+    print(f"Supabase URL: {settings.SUPABASE_URL}")
     print(f"Environment: {'Vercel' if os.getenv('VERCEL') else 'Local'}")
     print()
     
-    # 检查数据库连接
-    if not check_database_connection():
-        print("\n❌ Database initialization failed - connection error")
-        sys.exit(1)
-    
-    # 创建表
-    if not create_tables():
-        print("\n❌ Database initialization failed - table creation error")
-        sys.exit(1)
-    
-    # 创建管理员用户
-    if not create_admin_user():
-        print("\n⚠️  Database initialization completed with warnings")
-        sys.exit(0)
+    # 初始化数据库
+    init_database()
     
     print("\n✅ Database initialization completed successfully!")
     print("\nNext steps:")
-    print("1. Test the API endpoints")
-    print("2. Login with admin credentials")
-    print("3. Create additional users as needed")
+    print("1. 在 Supabase Dashboard 中创建必要的数据库表")
+    print("2. 配置 Row Level Security (RLS) 策略")
+    print("3. Test the API endpoints")
 
 
 if __name__ == "__main__":

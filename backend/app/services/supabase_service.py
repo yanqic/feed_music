@@ -1,9 +1,9 @@
-from supabase import create_client, Client
+from supabase import Client
 from typing import List, Optional, Dict, Any
 import logging
 from datetime import datetime
 
-from app.core.config import settings
+from app.core.supabase_client import supabase_client
 from app.schemas.news import NewsCreate, NewsUpdate
 from app.schemas.user import UserCreate
 from app.core.security import get_password_hash, verify_password
@@ -12,14 +12,8 @@ logger = logging.getLogger(__name__)
 
 class SupabaseService:
     def __init__(self):
-        try:
-            self.supabase: Client = create_client(
-                settings.SUPABASE_URL,
-                settings.SUPABASE_KEY
-            )
-        except Exception as e:
-            logger.error(f"Failed to initialize Supabase client: {e}")
-            raise
+        # 使用全局的 supabase_client 实例，避免重复创建
+        self.supabase: Client = supabase_client
     
     # 新闻相关操作
     async def get_news_list(

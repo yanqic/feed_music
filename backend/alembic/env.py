@@ -11,7 +11,6 @@ from alembic import context
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
 # 导入应用配置和数据库模型
-from app.core.config import settings
 from app.database import Base
 # 导入所有模型以便 alembic 能够检测到
 import app.models
@@ -20,8 +19,13 @@ import app.models
 # access to the values within the .ini file in use.
 config = context.config
 
-# 从应用配置中设置数据库URL
-config.set_main_option("sqlalchemy.url", settings.get_database_url())
+# 注意：由于现在使用 Supabase 客户端，Alembic 迁移功能被禁用
+# 请在 Supabase Dashboard 中管理数据库架构
+print("Warning: Alembic migrations are disabled when using Supabase client.")
+print("Please manage database schema through Supabase Dashboard.")
+
+# 设置一个虚拟的数据库URL以避免错误
+config.set_main_option("sqlalchemy.url", "sqlite:///:memory:")
 
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.

@@ -46,10 +46,10 @@ if [ ! -f ".env" ]; then
     exit 1
 fi
 
-# 检查 POSTGRES_URL 是否配置
-if ! grep -q "^POSTGRES_URL=" .env; then
-    echo "❌ 未在 .env 文件中找到 POSTGRES_URL 配置"
-    echo "请在 .env 文件中添加 PostgreSQL 连接配置"
+# 检查 Supabase 配置是否存在
+if ! grep -q "^SUPABASE_URL=" .env || ! grep -q "^SUPABASE_KEY=" .env; then
+    echo "❌ 未在 .env 文件中找到 Supabase 配置"
+    echo "请在 .env 文件中添加 SUPABASE_URL 和 SUPABASE_KEY 配置"
     exit 1
 fi
 
