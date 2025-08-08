@@ -1,4 +1,4 @@
-from typing import Generic, TypeVar, List, Optional
+from typing import Generic, TypeVar, List, Optional, Union
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import Query
 from sqlalchemy import func
@@ -10,7 +10,17 @@ T = TypeVar('T')
 class PaginationParams(BaseModel):
     """分页参数"""
     page: int = Field(default=1, ge=1, description="页码，从1开始")
-    size: int = Field(default=10, ge=1, le=100, description="每页条数，最大100")
+    size: Optional[int] = Field(default=None, ge=1, le=100, description="每页条数，最大100")
+    limit: Optional[int] = Field(default=None, ge=1, le=100, description="每页条数，最大100（与size同义）")
+    
+    def __init__(self, **data):
+        super().__init__(**data)
+        # 如果提供了limit但没有size，使用limit的值
+        if self.limit is not None and self.size is None:
+            self.size = self.limit
+        # 如果都没有提供，使用默认值
+        elif self.size is None and self.limit is None:
+            self.size = 10
     
     @property
     def offset(self) -> int:

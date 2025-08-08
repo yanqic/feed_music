@@ -68,18 +68,26 @@ const NewsPage = () => {
       
       <div className="news-page">
         <div className="news-grad-wrap">
-            <NewsGrid 
+          <NewsGrid 
             news={news} 
-            onLoadMore={handleLoadMore}
             loading={loading}
             hasMore={page < totalPages}
           />
         </div>
-        
       </div>
 
-    </div>
-  );
+      {/* 固定位置的加载更多按钮 */}
+      {page < totalPages && (
+        <button 
+          className="fixed-load-more-button" 
+          onClick={handleLoadMore}
+          disabled={loading}
+        >
+          {loading ? '加载中...' : '加载更多'}
+         </button>
+       )}
+     </div>
+   );
 };
 
 export default NewsPage;

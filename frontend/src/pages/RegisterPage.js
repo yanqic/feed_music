@@ -9,6 +9,7 @@ const RegisterPage = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
+
   const [loading, setLoading] = useState(false);
   
   const { register } = useAuth();
@@ -23,9 +24,12 @@ const RegisterPage = () => {
     
     try {
       setError('');
+
       setLoading(true);
-      await register(username, email, password);
-      navigate('/login');
+   const result = await register(username, email, password);
+      
+      // 立即跳转到登录页面并传递注册成功状态
+      navigate('/login', { state: { fromRegister: true } });
     } catch (err) {
       let errorMessage = '创建账户失败。';
       if (err.response?.data?.detail) {
@@ -51,6 +55,7 @@ const RegisterPage = () => {
       <div className="register-container">
         <h1>注册</h1>
         {error && <div className="error-message">{error}</div>}
+
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label htmlFor="username">用户名</label>

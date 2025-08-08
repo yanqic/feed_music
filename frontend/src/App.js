@@ -48,7 +48,7 @@ function App() {
   const [fadeOut, setFadeOut] = useState(false);
 
   useEffect(() => {
-    // 模拟资源加载过程
+    // 等待视频和其他资源加载完成
     const loadResources = async () => {
       // 等待所有关键资源加载完成
       await Promise.all([
@@ -59,6 +59,46 @@ function App() {
           } else {
             window.addEventListener('load', resolve);
           }
+        }),
+        // 等待视频加载完成
+        new Promise(resolve => {
+          const video = document.createElement('video');
+          video.src = '/videos/intro.mp4';
+          video.preload = 'metadata';
+          video.muted = true;
+          
+          const cleanup = () => {
+            video.removeEventListener('loadedmetadata', handleLoadedMetadata);
+            video.removeEventListener('canplay', handleCanPlay);
+            video.removeEventListener('error', handleError);
+          };
+          
+          const handleLoadedMetadata = () => {
+            console.log('视频元数据已加载');
+          };
+          
+          const handleCanPlay = () => {
+            console.log('视频可以播放');
+            cleanup();
+            resolve();
+          };
+          
+          const handleError = (e) => {
+            console.warn('视频加载失败，继续加载页面:', e);
+            cleanup();
+            resolve(); // 即使视频加载失败也继续
+          };
+          
+          video.addEventListener('loadedmetadata', handleLoadedMetadata);
+          video.addEventListener('canplay', handleCanPlay);
+          video.addEventListener('error', handleError);
+          
+          // 设置超时，避免无限等待
+          setTimeout(() => {
+            console.log('视频加载超时，继续加载页面');
+            cleanup();
+            resolve();
+          }, 3000);
         }),
         // 最小loading时间，确保用户能看到loading效果
         new Promise(resolve => setTimeout(resolve, 1500))
