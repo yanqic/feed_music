@@ -44,10 +44,20 @@ app = FastAPI(
 # 配置CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.get_cors_origins(),
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_origins=["*"] if os.getenv("VERCEL") else settings.get_cors_origins(),
+    allow_credentials=False if os.getenv("VERCEL") else True,
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allow_headers=[
+        "Accept",
+        "Accept-Language",
+        "Content-Language",
+        "Content-Type",
+        "Authorization",
+        "X-Requested-With",
+        "X-CSRF-Token",
+        "X-Request-ID"
+    ],
+    expose_headers=["*"],
 )
 
 # 注册异常处理器
