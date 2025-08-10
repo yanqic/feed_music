@@ -13,9 +13,6 @@
   "env": {
     "PYTHONPATH": ".",
     "VERCEL": "1",
-    "SUPABASE_URL": "https://jfirzeghddlqigvsipic.supabase.co",
-    "SUPABASE_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpmaXJ6ZWdoZGRscWlndnNpcGljIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzQ5NTI4NzEsImV4cCI6MjA1MDUyODg3MX0.Ej8Ej8Ej8Ej8Ej8Ej8Ej8Ej8Ej8Ej8Ej8Ej8Ej8Ej8",
-    "POSTGRES_URL": "postgresql://postgres:Xiaohui123@db.jfirzeghddlqigvsipic.supabase.co:5432/postgres",
     "SECRET_KEY": "your-secret-key-change-this-in-production",
     "ALGORITHM": "HS256",
     "ACCESS_TOKEN_EXPIRE_MINUTES": "60",
