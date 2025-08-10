@@ -12,6 +12,9 @@ except ImportError as e:
     from fastapi import FastAPI
     app = FastAPI()
     
+    # 保存错误信息到变量
+    import_error_detail = str(e)
+    
     @app.get("/")
     async def root():
-        return {"error": "Failed to import main application", "detail": str(e)}
+        return {"error": "Failed to import main application", "detail": import_error_detail}
