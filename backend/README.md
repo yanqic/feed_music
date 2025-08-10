@@ -21,7 +21,7 @@
 - **认证**: PyJWT + bcrypt
 - **验证**: Pydantic v2
 - **测试**: pytest + httpx
-- **部署**: Docker + Uvicorn + Vercel
+- **部署**: Uvicorn + Vercel
 
 ## 🏗️ 项目结构
 
@@ -101,8 +101,8 @@ python -c "from app.core import engine; from app.models import Base; Base.metada
 6. **启动服务**
 
 ```bash
-# 一键启动 PostgreSQL 版本
-./start_postgresql.sh
+# 一键启动服务器
+./start_server.sh
 
 # 或手动设置
 python scripts/setup_postgresql.py
@@ -174,7 +174,7 @@ LOG_LEVEL=INFO
 4. **运行迁移和启动**
    ```bash
    # 一键设置和启动
-   ./start_postgresql.sh
+./start_server.sh
    ```
 
 详细设置指南请参考 [POSTGRESQL_SETUP.md](./POSTGRESQL_SETUP.md)
@@ -253,20 +253,21 @@ pytest tests/ -v
    python scripts/health_check.py https://your-api.vercel.app
    ```
 
-### 🐳 Docker部署
+### 本地开发部署
 
-#### 构建镜像
+#### 使用 Uvicorn 启动
 ```bash
-docker build -t feed-music-api .
+# 开发模式（自动重载）
+uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+
+# 生产模式
+uvicorn app.main:app --host 0.0.0.0 --port 8000 --workers 4
 ```
 
-#### 运行容器
+#### 使用脚本一键启动
 ```bash
-docker run -d \
-  --name feed-music-api \
-  -p 8000:8000 \
-  -e POSTGRES_URL=postgresql://username:password@localhost:5432/feed_music_db \
-  feed-music-api
+# 一键启动服务器
+./start_server.sh
 ```
 
 ## 🔧 开发指南

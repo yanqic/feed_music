@@ -1,8 +1,8 @@
 import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.core import settings
-from app.database import engine
+from app.core.config import settings
+from app.database import get_engine
 from app.models import Base
 from app.api import api_router
 from app.middleware import register_exception_handlers
@@ -18,6 +18,7 @@ def init_database():
             pass
         else:
             # 本地开发环境直接创建表
+            engine = get_engine()
             print(f"Creating database tables with engine: {engine.url}")
             Base.metadata.create_all(bind=engine)
             print("Database tables created successfully")

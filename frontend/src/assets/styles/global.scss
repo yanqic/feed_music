@@ -1,5 +1,5 @@
-@import 'variables';
-@import 'animations';
+@use 'variables' as *;
+@use 'animations' as *;
 
 * {
   margin: 0;

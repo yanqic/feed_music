@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# Feed Music Backend - PostgreSQL 启动脚本
+# Feed Music Backend - 服务器启动脚本
 
-echo "🚀 启动 Feed Music Backend (PostgreSQL)"
+echo "🚀 启动 Feed Music Backend 服务器"
 echo "=========================================="
 
 # 检查是否在正确的目录
@@ -33,13 +33,13 @@ if ! python -c "import psycopg2" 2>/dev/null; then
 fi
 
 echo "🔄 运行数据库设置..."
-# 运行 PostgreSQL 设置脚本
+# 运行数据库设置脚本
 python scripts/setup_postgresql.py
 
 if [ $? -eq 0 ]; then
     echo "\n🌟 启动开发服务器..."
     uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 else
-    echo "❌ PostgreSQL 设置失败，请检查配置"
+    echo "❌ 数据库设置失败，请检查配置"
     exit 1
 fi

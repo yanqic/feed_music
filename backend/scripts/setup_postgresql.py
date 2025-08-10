@@ -15,12 +15,13 @@ project_root = Path(__file__).parent.parent
 sys.path.append(str(project_root))
 
 from app.core.config import settings
-from app.database import engine
+from app.database import get_engine
 from sqlalchemy import text
 
 def check_postgresql_connection():
     """检查 PostgreSQL 连接"""
     try:
+        engine = get_engine()
         with engine.connect() as conn:
             result = conn.execute(text("SELECT version()"))
             version = result.fetchone()[0]

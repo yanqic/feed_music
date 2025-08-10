@@ -1,4 +1,4 @@
-@import '../../assets/styles/variables';
+@use '../../assets/styles/variables' as *;
 
 .news-card {
   background-color: #1a1a1a;
