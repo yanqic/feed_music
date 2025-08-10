@@ -16,11 +16,12 @@
 ## 📋 技术栈
 
 - **框架**: FastAPI 0.104+
-- **数据库**: SQLAlchemy 2.0+ ORM + SQLite
+- **数据库**: SQLAlchemy 2.0+ ORM + PostgreSQL
+- **数据库迁移**: Alembic
 - **认证**: PyJWT + bcrypt
 - **验证**: Pydantic v2
 - **测试**: pytest + httpx
-- **部署**: Docker + Uvicorn
+- **部署**: Docker + Uvicorn + Vercel
 
 ## 🏗️ 项目结构
 
@@ -98,11 +99,13 @@ python -c "from app.core import engine; from app.models import Base; Base.metada
 ```
 
 6. **启动服务**
-```bash
-# 开发模式
-python -m app.main
 
-# 或使用uvicorn
+```bash
+# 一键启动 PostgreSQL 版本
+./start_postgresql.sh
+
+# 或手动设置
+python scripts/setup_postgresql.py
 uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
@@ -122,7 +125,7 @@ ALGORITHM=HS256
 ACCESS_TOKEN_EXPIRE_MINUTES=60
 
 # 数据库配置
-DATABASE_URL=sqlite:///./feed_music.db
+POSTGRES_URL=postgresql://username:password@localhost:5432/feed_music_db
 
 # CORS配置
 BACKEND_CORS_ORIGINS=http://localhost:3000,http://localhost:8080
@@ -135,6 +138,46 @@ ALLOWED_EXTENSIONS=.jpg,.jpeg,.png,.gif,.webp
 # 日志配置
 LOG_LEVEL=INFO
 ```
+
+## 🐘 PostgreSQL 设置
+
+### 快速开始
+
+1. **安装 PostgreSQL**
+   ```bash
+   # macOS
+   brew install postgresql
+   brew services start postgresql
+   
+   # Ubuntu/Debian
+   sudo apt install postgresql postgresql-contrib
+   ```
+
+2. **创建数据库**
+   ```bash
+   # 连接到 PostgreSQL
+   psql -U postgres
+   
+   # 创建数据库
+   CREATE DATABASE feed_music_db;
+   
+   # 退出
+   \q
+   ```
+
+3. **配置环境变量**
+   ```bash
+   # 在 .env 文件中设置
+   POSTGRES_URL=postgresql://postgres:your_password@localhost:5432/feed_music_db
+   ```
+
+4. **运行迁移和启动**
+   ```bash
+   # 一键设置和启动
+   ./start_postgresql.sh
+   ```
+
+详细设置指南请参考 [POSTGRESQL_SETUP.md](./POSTGRESQL_SETUP.md)
 
 ## 📖 API文档
 
@@ -164,19 +207,65 @@ LOG_LEVEL=INFO
 pytest tests/ -v
 ```
 
-## 🐳 Docker部署
+## 🚀 部署
 
-### 构建镜像
+### Vercel 部署（推荐）
+
+本项目已优化支持 Vercel 无服务器部署。
+
+#### 快速部署步骤：
+
+1. **准备数据库**
+   ```bash
+   # 推荐使用 Neon 或 Supabase 的免费 PostgreSQL
+   ```
+
+2. **配置环境变量**
+   ```bash
+   SECRET_KEY=your-super-secret-key
+   POSTGRES_URL=postgresql://username:password@hostname:port/database
+   BACKEND_CORS_ORIGINS=https://your-frontend.vercel.app
+   ```
+
+3. **部署到 Vercel**
+   ```bash
+   # 通过 Vercel CLI
+   cd backend
+   vercel
+   
+   # 或通过 GitHub 集成
+   # 1. 推送代码到 GitHub
+   # 2. 在 Vercel Dashboard 导入项目
+   # 3. 设置根目录为 'backend'
+   ```
+
+4. **初始化数据库**
+   ```bash
+   # 设置数据库 URL 环境变量
+   export POSTGRES_URL="your-database-url"
+   
+   # 运行初始化脚本
+   python scripts/init_db.py
+   ```
+
+5. **健康检查**
+   ```bash
+   python scripts/health_check.py https://your-api.vercel.app
+   ```
+
+### 🐳 Docker部署
+
+#### 构建镜像
 ```bash
 docker build -t feed-music-api .
 ```
 
-### 运行容器
+#### 运行容器
 ```bash
 docker run -d \
   --name feed-music-api \
   -p 8000:8000 \
-  -e DATABASE_URL=sqlite:///app/data/feed_music.db \
+  -e POSTGRES_URL=postgresql://username:password@localhost:5432/feed_music_db \
   feed-music-api
 ```
 

@@ -1,12 +1,34 @@
+import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.core import settings, engine
+from app.core import settings
+from app.database import engine
 from app.models import Base
 from app.api import api_router
 from app.middleware import register_exception_handlers
 
-# 创建数据库表
-Base.metadata.create_all(bind=engine)
+# 数据库初始化
+def init_database():
+    """初始化数据库表"""
+    try:
+        # 在Vercel环境下，我们需要确保数据库连接正常
+        if os.getenv("VERCEL"):
+            # 在Vercel环境下，只在需要时创建表
+            # 这里可以添加更复杂的迁移逻辑
+            pass
+        else:
+            # 本地开发环境直接创建表
+            print(f"Creating database tables with engine: {engine.url}")
+            Base.metadata.create_all(bind=engine)
+            print("Database tables created successfully")
+    except Exception as e:
+        print(f"Database initialization error: {e}")
+        # 在生产环境中，我们可能不想因为数据库问题而阻止应用启动
+        if not os.getenv("VERCEL"):
+            raise
+
+# 初始化数据库
+init_database()
 
 # 创建FastAPI应用
 app = FastAPI(
@@ -21,7 +43,7 @@ app = FastAPI(
 # 配置CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.BACKEND_CORS_ORIGINS,
+    allow_origins=settings.get_cors_origins(),
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

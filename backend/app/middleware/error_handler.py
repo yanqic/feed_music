@@ -41,11 +41,18 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
     # 处理错误信息，确保可以JSON序列化
     errors = []
     for error in exc.errors():
+        # 处理input字段，确保可以JSON序列化
+        input_value = error.get("input")
+        if isinstance(input_value, bytes):
+            input_value = input_value.decode('utf-8', errors='replace')
+        elif not isinstance(input_value, (str, int, float, bool, list, dict, type(None))):
+            input_value = str(input_value)
+            
         error_dict = {
             "type": error.get("type"),
             "loc": error.get("loc"),
             "msg": error.get("msg"),
-            "input": error.get("input")
+            "input": input_value
         }
         # 如果有ctx字段且包含error，提取错误消息
         if "ctx" in error and "error" in error["ctx"]:

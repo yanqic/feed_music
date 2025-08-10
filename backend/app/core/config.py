@@ -18,26 +18,37 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
     
     # 数据库配置
-    DATABASE_URL: str = "sqlite:///./feed_music.db"
+    POSTGRES_URL: str = "postgresql://username:password@localhost:5432/feed_music_db"
+    
+    def get_database_url(self) -> str:
+        """获取数据库URL"""
+        return self.POSTGRES_URL
     
     # CORS配置
-    BACKEND_CORS_ORIGINS: List[str] = ["http://localhost:3000", "http://localhost:8080"]
+    BACKEND_CORS_ORIGINS: str = "http://localhost:3000,http://localhost:8080"
     
     # 文件上传配置
     UPLOAD_DIR: str = "uploads"
     MAX_FILE_SIZE: int = 5 * 1024 * 1024  # 5MB
-    ALLOWED_EXTENSIONS: List[str] = [".jpg", ".jpeg", ".png", ".gif", ".webp"]
+    ALLOWED_EXTENSIONS: str = ".jpg,.jpeg,.png,.gif,.webp"
     
     # 日志配置
     LOG_LEVEL: str = "INFO"
     LOG_FORMAT: str = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
     
-    @field_validator("BACKEND_CORS_ORIGINS", mode="before")
-    @classmethod
-    def assemble_cors_origins(cls, v):
-        if isinstance(v, str):
-            return [i.strip() for i in v.split(",")]
-        return v
+    def get_cors_origins(self) -> List[str]:
+        """获取CORS源列表"""
+        if isinstance(self.BACKEND_CORS_ORIGINS, str):
+            if self.BACKEND_CORS_ORIGINS == "*":
+                return ["*"]
+            return [i.strip() for i in self.BACKEND_CORS_ORIGINS.split(",") if i.strip()]
+        return self.BACKEND_CORS_ORIGINS
+    
+    def get_allowed_extensions(self) -> List[str]:
+        """获取允许的文件扩展名列表"""
+        if isinstance(self.ALLOWED_EXTENSIONS, str):
+            return [i.strip() for i in self.ALLOWED_EXTENSIONS.split(",") if i.strip()]
+        return self.ALLOWED_EXTENSIONS
     
     class Config:
         env_file = ".env"
