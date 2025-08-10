@@ -8,6 +8,7 @@ import NewsManagementPage from './pages/NewsManagementPage';
 import Navbar from './components/common/Navbar';
 import FullPageScroll from './components/common/FullPageScroll';
 import ProtectedRoute from './components/common/ProtectedRoute';
+import { AuthProvider } from './contexts/AuthContext';
 import './assets/styles/global.scss';
 
 // 创建全屏滚动主页
@@ -43,12 +44,14 @@ const AnimatedRoutes = () => {
 
 function App() {
   return (
-    <Router>
-      <div className="app">
-        <Navbar />
-        <AnimatedRoutes />
-      </div>
-    </Router>
+    <AuthProvider>
+      <Router>
+        <div className="app">
+          <Navbar />
+          <AnimatedRoutes />
+        </div>
+      </Router>
+    </AuthProvider>
   );
 }
 

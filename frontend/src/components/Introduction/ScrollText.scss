@@ -39,8 +39,8 @@
 
   /* 滚动指示器样式 */
   .scroll-down {
-    position: absolute;
-    bottom: 10%;
+    position: fixed;
+    bottom: 5%;
     left: 50%;
     transform: translateX(-50%);
     display: flex;
@@ -53,6 +53,8 @@
     text-transform: uppercase;
     opacity: 1;
     transition: opacity 0.5s ease;
+    z-index: 9999;
+    cursor: pointer;
     
     .icon {
       display: block;
@@ -62,6 +64,14 @@
       border: 2px solid #ffffff;
       border-radius: 25px;
       position: relative;
+      
+      &:hover {
+        background-color: #ffffff;
+        
+        &::before {
+          background-color: #b3b3b3;
+        }
+      }
       
       &::before {
         content: '';

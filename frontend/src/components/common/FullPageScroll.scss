@@ -1,76 +1,94 @@
 .full-page-scroll {
-  position: fixed;
-  top: 0;
-  left: 0;
+  position: relative;
   width: 100%;
-  height: 100vh;
+  height: 100%;
   overflow: hidden;
 }
 
 .full-page-container {
   width: 100%;
   height: 100%;
-  transition: transform 1s ease-in-out;
+  position: relative;
 }
 
 .full-page-section {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
-  height: 100vh;
-  position: relative;
+  height: 100%;
   overflow: hidden;
-}
-
-.scroll-indicator {
-  position: fixed;
-  right: 30px;
-  top: 50%;
-  transform: translateY(-50%);
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  z-index: 1000;
-}
-
-.indicator-dot {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background-color: rgba(255, 255, 255, 0.5);
-  cursor: pointer;
-  transition: all 0.3s ease;
-  
-  &:hover {
-    background-color: rgba(255, 255, 255, 0.8);
-    transform: scale(1.2);
-  }
+  transition: transform 1s ease-in-out;
   
   &.active {
-    background-color: #fff;
-    transform: scale(1.3);
-  }
-}
-
-// 响应式设计
-@media (max-width: 768px) {
-  .scroll-indicator {
-    right: 20px;
-    gap: 10px;
+    transform: translateY(0);
+    z-index: 2;
   }
   
-  .indicator-dot {
-    width: 10px;
-    height: 10px;
-  }
-}
-
-@media (max-width: 480px) {
-  .scroll-indicator {
-    right: 15px;
-    gap: 8px;
+  &.inactive {
+    transform: translateY(100%);
+    z-index: 1;
   }
   
-  .indicator-dot {
-    width: 8px;
-    height: 8px;
+  // Introduction页面 - 从News切换回来时有向下slide in动画
+  &.introduction {
+    &.from-news {
+      transform: translateY(100%); // 从下方开始
+      transition: transform 1s ease-in-out;
+      
+      &.active {
+        transform: translateY(0); // 向下滑入到正常位置
+      }
+    }
+    
+    // 导航栏点击时的向下slide in动画
+    &.from-news-down {
+      transform: translateY(-100%); // 从上方开始
+      transition: transform 1s ease-in-out;
+      
+      &.active {
+        transform: translateY(0); // 向下滑入到正常位置
+      }
+    }
+    
+    // 切换到News时无动画
+    &.to-news {
+      transition: none;
+      
+      &.inactive {
+        transform: translateY(0);
+      }
+    }
+  }
+  
+  // News页面 - 从Introduction切换过来时有动画
+  &.news {
+    &.from-introduction {
+      transform: translateY(100%);
+      transition: transform 1s ease-in-out;
+      
+      &.active {
+        transform: translateY(0);
+      }
+    }
+    
+    // 导航栏点击时的向上slide in动画
+    &.from-introduction-up {
+      transform: translateY(100%); // 从下方开始
+      transition: transform 1s ease-in-out;
+      
+      &.active {
+        transform: translateY(0); // 向上滑入到正常位置
+      }
+    }
+    
+    // 切换到Introduction时无动画，News页面保持静止
+    &.to-introduction {
+      transition: none;
+      
+      &.inactive {
+        transform: translateY(0); // News页面保持在原位置，不移动
+      }
+    }
   }
 }

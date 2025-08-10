@@ -25,8 +25,6 @@ class PaginatedResponse(BaseModel, Generic[T]):
     page: int = Field(description="当前页码")
     size: int = Field(description="每页条数")
     pages: int = Field(description="总页数")
-    has_next: bool = Field(description="是否有下一页")
-    has_prev: bool = Field(description="是否有上一页")
     
     @classmethod
     def create(

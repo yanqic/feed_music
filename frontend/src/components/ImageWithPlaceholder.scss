@@ -1,0 +1,83 @@
+.image-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 8px;
+  background-color: #f5f5f5;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+    transition: opacity 0.3s ease;
+  }
+
+  .placeholder-svg {
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.7;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+}
+
+// 针对新闻图片的特定样式
+.news-image .image-container {
+  width: 120px;
+  height: 80px;
+  flex-shrink: 0;
+  
+  @media (max-width: 768px) {
+    width: 100px;
+    height: 70px;
+  }
+}
+
+// 针对表单预览图片的样式
+.image-preview .image-container {
+  width: 200px;
+  height: 150px;
+  margin-top: 10px;
+  border: 2px dashed #ddd;
+  
+  &:hover {
+    border-color: #007bff;
+  }
+}
+
+// 针对表单图片预览的特定样式
+.form-image-preview {
+  width: 200px;
+  height: 150px;
+  margin-top: 10px;
+  border: 2px dashed #ddd;
+  border-radius: 8px;
+  
+  &:hover {
+    border-color: #007bff;
+  }
+}
+
+// 针对新闻图片占位符的特定样式
+.news-image-placeholder {
+  width: 120px;
+  height: 80px;
+  
+  @media (max-width: 768px) {
+    width: 100px;
+    height: 70px;
+  }
+}

@@ -1,38 +1,173 @@
 @import '../assets/styles/variables';
 
 .news-container {
+  position: relative;
+  
+  // 错误消息横幅样式
+  .error-message-banner {
+    position: fixed;
+    top: 80px;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background-color: #e74c3c;
+    color: white;
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 500;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    animation: slideDown 0.3s ease-out;
+    
+    .close-btn {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-left: 12px;
+      padding: 0;
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      transition: background-color 0.2s ease;
+      
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+      }
+    }
+  }
+  
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-100%);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
   background-color: #320d7f;
-  height: 100%;
+  height: 100vh;
   width: 100%;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
+  position: relative;
+  overflow: hidden;
 }
 
 .news-page {
-  padding: 0 $spacing-lg;
-  max-width: 1200px;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  margin-top: 80px;
+  padding-bottom: 60px;
+  height: calc(100vh - 80px);
+  max-width: 1400px;
+  .news-grad-wrap {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    overflow-x: hidden;
+    position: relative;
+  }
   
-  h1 {
-    text-align: center;
-    margin: 0 0 $spacing-xl 0;
-    color: $primary-color;
-    font-size: $font-size-xxlarge;
+}
+
+.news-page-footer {
+  position: absolute;
+  bottom: 30px;
+  right: 30px;
+  z-index: 1000;
+  
+  button {
+    background: linear-gradient(135deg, $primary-color, #6a4c93);
+    color: white;
+    border: none;
+    border-radius: 50px;
+    padding: 15px 25px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(80, 0, 202, 0.4);
+    transition: all 0.3s ease;
+    
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(80, 0, 202, 0.6);
+      background: linear-gradient(135deg, #6a4c93, $primary-color);
+    }
+    
+    &:active {
+      transform: translateY(0);
+    }
+    
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+  }
+}
+
+.more-button {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background: linear-gradient(135deg, $primary-color, #6a4c93);
+  color: white;
+  border: none;
+  border-radius: 50px;
+  padding: 15px 25px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(80, 0, 202, 0.4);
+  transition: all 0.3s ease;
+  z-index: 1000;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(80, 0, 202, 0.6);
+    background: linear-gradient(135deg, #6a4c93, $primary-color);
+  }
+  
+  &:active {
+    transform: translateY(0);
+  }
+  
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
   }
 }
 
 @media (max-width: $breakpoint-md) {
   .news-page {
-    padding: 0 $spacing-md;
+    padding: 60px $spacing-md 30px;
+  }
+  
+  .news-page-footer {
+    bottom: 20px;
+    right: 20px;
     
-    h1 {
-      font-size: $font-size-xlarge;
-      margin: 0 0 $spacing-lg 0;
+    button {
+      padding: 12px 20px;
+      font-size: 14px;
     }
+  }
+  
+  .more-button {
+    bottom: 20px;
+    right: 20px;
+    padding: 12px 20px;
+    font-size: 14px;
   }
 }

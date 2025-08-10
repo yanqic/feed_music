@@ -6,11 +6,12 @@
   align-items: center;
   padding: $spacing-md $spacing-lg;
   color: white;
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   right: 0;
   z-index: 1000;
+  padding: 30px 55px;
   
   .navbar-logo {
     a {
@@ -30,8 +31,8 @@
       background: none;
       border: none;
       color: white;
-      padding: $spacing-sm $spacing-md;
-      margin: 0 $spacing-sm;
+      padding: $spacing-sm 0;
+      margin: 0 $spacing-md;
       font-size: $font-size-normal;
       cursor: pointer;
       position: relative;
@@ -111,64 +112,162 @@
   }
 }
 
+/* 汉堡菜单样式 */
+.hamburger-menu {
+  display: none;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 30px;
+  height: 30px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  z-index: 1001;
+  
+  .hamburger-line {
+    width: 100%;
+    height: 3px;
+    background-color: #ffffff;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+    transform-origin: center;
+    
+    &.open {
+      &:nth-child(1) {
+        transform: rotate(45deg) translate(7px, 7px);
+      }
+      
+      &:nth-child(2) {
+        opacity: 0;
+      }
+      
+      &:nth-child(3) {
+        transform: rotate(-45deg) translate(7px, -7px);
+      }
+    }
+  }
+}
+
+/* 移动端下拉菜单 */
+.mobile-menu {
+  position: fixed;
+  margin: 12px;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.95);
+  backdrop-filter: blur(10px);
+  transform: translateY(-100%);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  z-index: 999;
+  
+  &.open {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+  }
+  
+  .mobile-menu-content {
+    padding: $spacing-md $spacing-md;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-md;
+  }
+  
+  .mobile-nav-item {
+    background: none;
+    border: none;
+    color: #ffffff;
+    font-size: $font-size-normal;
+    text-transform: uppercase;
+    padding: $spacing-sm 0;
+    text-align: left;
+    cursor: pointer;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    transition: color 0.3s ease;
+    
+    &.active {
+      color: #ffffff;
+      font-weight: bold;
+    }
+    
+    &:hover {
+      color: rgba(255, 255, 255, 0.8);
+    }
+  }
+  
+  .mobile-auth {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-sm;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    
+    .mobile-username {
+      color: #ffffff;
+      font-size: $font-size-normal;
+      margin-bottom: $spacing-sm;
+    }
+    
+    .mobile-manage-link,
+    .mobile-login-button {
+      color: #ffffff;
+      text-decoration: none;
+      font-size: $font-size-normal;
+      padding: $spacing-sm 0;
+      text-transform: uppercase;
+      
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+    
+    .mobile-logout-button {
+      background-color: transparent;
+      border: 1px solid #ffffff;
+      color: #ffffff;
+      padding: $spacing-sm $spacing-md;
+      margin-top: $spacing-sm;
+      cursor: pointer;
+      text-transform: uppercase;
+      
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+      }
+    }
+  }
+}
+
 @media (max-width: $breakpoint-md) {
   .navbar {
-    flex-direction: row; /* 保持水平排列 */
-    flex-wrap: wrap; /* 允许在需要时换行 */
-    padding: $spacing-sm $spacing-md;
-    align-items: center;
+    padding: $spacing-md $spacing-lg;
     
-    .navbar-logo {
-      width: auto;
-      margin-bottom: 0;
-      flex: 0 0 auto; /* 不伸缩，保持原始大小 */
+    /* 在移动端隐藏桌面导航 */
+    .desktop-nav {
+      display: none;
     }
     
-    .navbar-sections {
-      flex: 1 1 auto; /* 可伸缩，占据剩余空间 */
-      justify-content: flex-end; /* 靠右对齐 */
-      margin: 0 $spacing-md;
-      overflow-x: auto; /* 允许水平滚动 */
-      -webkit-overflow-scrolling: touch; /* 提升移动端滚动体验 */
-      white-space: nowrap; /* 防止内容换行 */
-      
-      &::-webkit-scrollbar {
-        display: none; /* 隐藏滚动条 */
-      }
-      
-      .navbar-section {
-        padding: $spacing-xs $spacing-sm;
-        margin: 0 $spacing-xs;
-        font-size: $font-size-small;
-      }
+    /* 在移动端显示汉堡菜单 */
+    .hamburger-menu {
+      display: flex;
     }
-    
-    .navbar-auth {
-      flex: 0 0 auto; /* 不伸缩，保持原始大小 */
-      justify-content: flex-end;
-      margin-bottom: 0;
-      
-      .username {
-        display: none; /* 在移动端隐藏用户名 */
-      }
-      
-      .login-button, .manage-link {
-        margin-right: $spacing-sm;
-        font-size: $font-size-small;
-      }
-      
-      .logout-button {
-        padding: $spacing-xs $spacing-sm;
-        font-size: $font-size-small;
-      }
-    }
+  }
+}
+
+@media (min-width: calc(#{$breakpoint-md} + 1px)) {
+  /* 在桌面端隐藏移动端菜单 */
+  .hamburger-menu,
+  .mobile-menu {
+    display: none !important;
   }
 }
 
 /* 小屏幕手机 */
 @media (max-width: $breakpoint-sm) {
   .navbar {
-    padding: $spacing-xs $spacing-sm;
+    padding: $spacing-lg $spacing-lg;
     
     .navbar-logo a {
       font-size: $font-size-normal;
@@ -178,7 +277,7 @@
       margin: 0 $spacing-sm;
       
       .navbar-section {
-        padding: $spacing-xs $spacing-xs;
+        padding: $spacing-xs 0;
         margin: 0 $spacing-xs;
         font-size: $font-size-small;
       }

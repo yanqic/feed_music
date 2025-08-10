@@ -27,7 +27,19 @@ const RegisterPage = () => {
       await register(username, email, password);
       navigate('/login');
     } catch (err) {
-      setError('创建账户失败。' + (err.response?.data?.detail || ''));
+      let errorMessage = '创建账户失败。';
+      if (err.response?.data?.detail) {
+        if (Array.isArray(err.response.data.detail)) {
+          // 如果detail是数组，提取第一个错误的消息
+          const firstError = err.response.data.detail[0];
+          errorMessage += firstError?.msg || '请检查输入信息';
+        } else {
+          errorMessage += err.response.data.detail;
+        }
+      } else if (err.response?.data?.message) {
+        errorMessage += err.response.data.message;
+      }
+      setError(errorMessage);
       console.error(err);
     } finally {
       setLoading(false);

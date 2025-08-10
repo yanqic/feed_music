@@ -38,12 +38,28 @@ async def http_exception_handler(request: Request, exc: StarletteHTTPException):
 
 async def validation_exception_handler(request: Request, exc: RequestValidationError):
     """处理验证异常"""
+    # 处理错误信息，确保可以JSON序列化
+    errors = []
+    for error in exc.errors():
+        error_dict = {
+            "type": error.get("type"),
+            "loc": error.get("loc"),
+            "msg": error.get("msg"),
+            "input": error.get("input")
+        }
+        # 如果有ctx字段且包含error，提取错误消息
+        if "ctx" in error and "error" in error["ctx"]:
+            ctx_error = error["ctx"]["error"]
+            if isinstance(ctx_error, ValueError):
+                error_dict["msg"] = str(ctx_error)
+        errors.append(error_dict)
+    
     return JSONResponse(
         status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
         content={
             "code": 422,
             "message": "请求参数验证失败",
-            "detail": exc.errors(),
+            "detail": errors,
             "data": None
         }
     )

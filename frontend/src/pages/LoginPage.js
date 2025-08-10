@@ -19,7 +19,7 @@ const LoginPage = () => {
       setError('');
       setLoading(true);
       await login(username, password);
-      navigate('/');
+      navigate('/manage');
     } catch (err) {
       setError('登录失败。请检查您的凭据。');
       console.error(err);

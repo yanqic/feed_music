@@ -6,10 +6,25 @@ export const login = async (username, password) => {
     password,
   });
   
-  return {
-    token: response.data.access_token,
-    user: response.data.user,
-  };
+  // 获取token
+  const token = response.data.access_token;
+  
+  try {
+    // 先将token存储到localStorage，这样api拦截器就能自动添加Authorization头
+    localStorage.setItem('token', token);
+    
+    // 获取用户信息
+    const userResponse = await api.get('/users/me');
+    
+    return {
+      token: token,
+      user: userResponse.data,
+    };
+  } catch (error) {
+    // 如果获取用户信息失败，清除token
+    localStorage.removeItem('token');
+    throw error;
+  }
 };
 
 export const register = async (username, email, password) => {

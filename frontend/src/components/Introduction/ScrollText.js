@@ -3,6 +3,7 @@ import './ScrollText.scss';
 
 const ScrollText = ({ texts, onComplete, onScrollProgress }) => {
   const [scrollProgress, setScrollProgress] = useState(0);
+  const [isCompleted, setIsCompleted] = useState(false);
   const containerRef = useRef(null);
   const textRefs = useRef([]);
   const startY = useRef(0);
@@ -11,10 +12,18 @@ const ScrollText = ({ texts, onComplete, onScrollProgress }) => {
   // 使用useCallback包装函数定义
   const updateTextVisibility = useCallback((progress) => {
     // 检查是否滚动完成
-    if (progress >= 100 && onComplete) {
-      setTimeout(onComplete, 500);
+    if (progress >= 100 && !isCompleted && onComplete) {
+      setIsCompleted(true);
+      setTimeout(() => {
+        onComplete();
+        // 发送滚动完成事件
+        const event = new CustomEvent('scrollTextComplete', {
+          detail: { completed: true }
+        });
+        window.dispatchEvent(event);
+      }, 500);
     }
-  }, [onComplete]);
+  }, [onComplete, isCompleted]);
 
   // 定义handleTouchEnd函数
   const handleTouchEnd = useCallback(() => {
@@ -28,6 +37,19 @@ const ScrollText = ({ texts, onComplete, onScrollProgress }) => {
       onScrollProgress(scrollProgress);
     }
   }, [scrollProgress, onScrollProgress]);
+
+  // 监听页面切换事件，重置完成状态
+  useEffect(() => {
+    const handlePageSwitch = (event) => {
+      if (event.detail.page === 'introduction' && isCompleted) {
+        setIsCompleted(false);
+        setScrollProgress(0);
+      }
+    };
+
+    window.addEventListener('fullPageScroll', handlePageSwitch);
+    return () => window.removeEventListener('fullPageScroll', handlePageSwitch);
+  }, [isCompleted]);
 
 
   useEffect(() => {
@@ -71,36 +93,35 @@ const ScrollText = ({ texts, onComplete, onScrollProgress }) => {
     };
   }, [scrollProgress, handleTouchEnd, updateTextVisibility]);
 
-  // 计算滚动指示器的样式
-  const scrollIndicatorStyle = {
-    opacity: scrollProgress < 100 ? 1 : 0,
-    transition: 'opacity 0.5s ease'
-  };
+
 
   return (
     <div className="scroll-text" ref={containerRef}>
       <div className="starwars-wrapper">
         {texts.map((text, index) => {
-          // 滚动进度映射到文本索引，初始状态scrollCenter为0，对应第一个元素在中心
+          // 滚动进度映射，让第一个元素初始时在屏幕中央
           const scrollCenter = (scrollProgress / 100) * (texts.length - 1);
           
-          // 计算当前元素相对于中心的距离
+          // 计算当前元素相对于屏幕中心的距离
           const distance = index - scrollCenter;
           
-          // 优化透明度算法：使用更平滑的曲线
-          // 中心元素透明度为1，向两边平滑递减
+          // 新的透明度算法：基于元素在屏幕中的垂直位置
+          // 当元素在屏幕中央时透明度最高，向上下两边递减
           const normalizedDistance = Math.abs(distance);
-          const opacity = Math.max(0, 1 - Math.pow(normalizedDistance * 0.5, 1.5));
+          
+          // 使用更平滑的透明度曲线，让中心区域透明度更高
+          // 当distance为0时（屏幕中央），opacity为1
+          // 距离越远，透明度越低，最低为0.1
+          const opacity = Math.max(0.1, Math.pow(Math.E, -normalizedDistance * 0.8));
           
           // 优化缩放算法：中心元素为1，向两边递减
-          // 使用更细腻的缩放变化，模拟3D透视效果
-          const scale = Math.max(0.3, 1 - normalizedDistance * 0.1);
+          const scale = Math.max(0.4, 1 - normalizedDistance * 0.15);
           
-          // 优化垂直位移：调整间距，让文本更紧凑
-          const translateY = distance * 40;
+          // 垂直位移：让文本有合适的间距
+          const translateY = distance * 60;
           
-          // 添加Z轴位移，增强3D效果
-          const translateZ = -Math.abs(distance) * 10;
+          // Z轴位移，增强3D效果
+          const translateZ = -Math.abs(distance) * 15;
           
           // 特殊处理作者名称（假设是第4个元素）
           const isAuthor = index === 3;
@@ -131,10 +152,23 @@ const ScrollText = ({ texts, onComplete, onScrollProgress }) => {
       </div>
       
       {/* 滚动指示器 */}
-      <a href="#" className="scroll-down" style={scrollIndicatorStyle}>
-        <i className="icon"></i>
-        <span>scroll down</span>
-      </a>
+      {!isCompleted && (
+        <a 
+          href="#" 
+          className="scroll-down" 
+          onClick={(e) => {
+            e.preventDefault();
+            // 触发页面切换到下一页
+            const event = new CustomEvent('scrollToPage', {
+              detail: { pageIndex: 1 }
+            });
+            window.dispatchEvent(event);
+          }}
+        >
+          <i className="icon"></i>
+          <span>scroll down</span>
+        </a>
+      )}
     </div>
   );
 };

@@ -1,8 +1,13 @@
 import api from './api';
 
-export const getNews = async (page = 1, limit = 6) => {
+export const getNews = async (page = 1, limit = 6, creator_id = null) => {
+  const params = { page, limit };
+  if (creator_id) {
+    params.creator_id = creator_id;
+  }
+  
   const response = await api.get('/news', {
-    params: { page, limit },
+    params,
   });
   
   return response.data;

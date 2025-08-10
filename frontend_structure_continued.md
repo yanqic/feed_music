@@ -326,7 +326,7 @@ $transition-speed: 0.3s;
       background: none;
       border: none;
       color: white;
-      padding: $spacing-sm $spacing-md;
+      padding: $spacing-sm 0;
       margin: 0 $spacing-sm;
       font-size: $font-size-normal;
       cursor: pointer;
@@ -402,7 +402,7 @@ $transition-speed: 0.3s;
 @media (max-width: $breakpoint-md) {
   .navbar {
     flex-direction: column;
-    padding: $spacing-sm;
+    padding: $spacing-lg;
     
     .navbar-logo, .navbar-sections, .navbar-auth {
       width: 100%;

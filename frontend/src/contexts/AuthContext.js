@@ -33,11 +33,26 @@ export const AuthProvider = ({ children }) => {
     try {
       setError(null);
       const { token, user } = await login(username, password);
-      localStorage.setItem('token', token);
+      // token已经在auth.js中设置到localStorage了
       setCurrentUser(user);
+      // 强制触发重新渲染
+      setTimeout(() => {
+        setCurrentUser(prevUser => ({ ...prevUser }));
+      }, 100);
       return user;
     } catch (err) {
-      setError(err.response?.data?.detail || '登录失败');
+      let errorMessage = '登录失败';
+      if (err.response?.data?.detail) {
+        if (Array.isArray(err.response.data.detail)) {
+          const firstError = err.response.data.detail[0];
+          errorMessage = firstError?.msg || '请检查用户名和密码';
+        } else {
+          errorMessage = err.response.data.detail;
+        }
+      } else if (err.response?.data?.message) {
+        errorMessage = err.response.data.message;
+      }
+      setError(errorMessage);
       throw err;
     }
   };
@@ -48,7 +63,18 @@ export const AuthProvider = ({ children }) => {
       const user = await register(username, email, password);
       return user;
     } catch (err) {
-      setError(err.response?.data?.detail || '注册失败');
+      let errorMessage = '注册失败';
+      if (err.response?.data?.detail) {
+        if (Array.isArray(err.response.data.detail)) {
+          const firstError = err.response.data.detail[0];
+          errorMessage = firstError?.msg || '请检查输入信息';
+        } else {
+          errorMessage = err.response.data.detail;
+        }
+      } else if (err.response?.data?.message) {
+        errorMessage = err.response.data.message;
+      }
+      setError(errorMessage);
       throw err;
     }
   };
