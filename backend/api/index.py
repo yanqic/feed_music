@@ -10,7 +10,18 @@ except ImportError as e:
     print(f"Import error: {e}")
     # 创建一个简单的错误应用
     from fastapi import FastAPI
+    from fastapi.middleware.cors import CORSMiddleware
+    
     app = FastAPI()
+    
+    # 添加 CORS 中间件
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=["*"],
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
     
     # 保存错误信息到变量
     import_error_detail = str(e)
