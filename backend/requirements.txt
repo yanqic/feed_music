@@ -10,7 +10,7 @@ realtime==2.7.0
 storage3==0.12.1
 supafunc==0.10.1
 pydantic==2.11.7
-pydantic-core==2.27.2
+pydantic-core==2.33.2
 httpx==0.28.1
 websockets==15.0.1
 aiofiles==23.2.1
@@ -18,7 +18,7 @@ bcrypt==4.0.1
 python-jose[cryptography]==3.3.0
 passlib[bcrypt]==1.7.4
 python-multipart==0.0.6
-typing-extensions==4.8.0
+typing-extensions==4.14.0
 click==8.2.1
 h11==0.14.0
 anyio==3.7.1
