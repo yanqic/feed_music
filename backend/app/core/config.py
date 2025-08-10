@@ -20,6 +20,10 @@ class Settings(BaseSettings):
     # 数据库配置
     POSTGRES_URL: str = "postgresql://username:password@localhost:5432/feed_music_db"
     
+    # Supabase配置
+    SUPABASE_URL: str = "https://your-project.supabase.co"
+    SUPABASE_KEY: str = "your-anon-key"
+    
     def get_database_url(self) -> str:
         """获取数据库URL"""
         return self.POSTGRES_URL
