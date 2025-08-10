@@ -5,17 +5,18 @@ import os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 try:
-    from app.main import app
-    handler = app
+    from app.main import app as fastapi_app
+    # Vercel需要的是ASGI应用
+    app = fastapi_app
 except ImportError as e:
     print(f"Import error: {e}")
     # 创建一个简单的错误应用
     from fastapi import FastAPI
-    handler = FastAPI()
+    app = FastAPI()
     
-    @handler.get("/")
+    @app.get("/")
     async def root():
         return {"error": "Failed to import main application", "detail": str(e)}
 
-# 确保应用可以被 Vercel 调用
-app = handler
+# 为了兼容性，也导出handler
+handler = app
