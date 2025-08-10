@@ -3,11 +3,27 @@
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "api/index.py"
+      "dest": "api/index.py",
+      "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+      "headers": {
+         "Access-Control-Allow-Origin": "*",
+         "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+         "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Requested-With",
+         "Access-Control-Max-Age": "86400",
+         "Referrer-Policy": "no-referrer-when-downgrade"
+       }
     },
     {
       "src": "/(.*)",
-      "dest": "api/index.py"
+      "dest": "api/index.py",
+      "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+      "headers": {
+         "Access-Control-Allow-Origin": "*",
+         "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+         "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Requested-With",
+         "Access-Control-Max-Age": "86400",
+         "Referrer-Policy": "no-referrer-when-downgrade"
+       }
     }
   ],
   "env": {

@@ -217,10 +217,8 @@ class SupabaseService:
             data = {
                 "username": user_data.username,
                 "email": user_data.email,
-                "hashed_password": get_password_hash(user_data.password),
-                "is_active": True,
-                "created_at": datetime.utcnow().isoformat(),
-                "updated_at": datetime.utcnow().isoformat()
+                "password": get_password_hash(user_data.password),
+                "created_at": datetime.utcnow().isoformat()
             }
             
             response = self.supabase.table("users").insert(data).execute()
@@ -249,7 +247,7 @@ class SupabaseService:
             if not user:
                 return None
             
-            if not verify_password(password, user["hashed_password"]):
+            if not verify_password(password, user["password"]):
                 return None
             
             return user
