@@ -4,11 +4,11 @@ sqlalchemy==2.0.23
 alembic==1.12.1
 psycopg2-binary==2.9.9
 supabase==2.18.0
-gotrue==2.11.1
-postgrest==0.18.0
-realtime==2.0.5
-storage3==0.8.1
-supafunc==0.5.1
+gotrue==2.12.3
+postgrest==1.1.1
+realtime==2.7.0
+storage3==0.12.1
+supafunc==0.10.1
 pydantic==2.11.7
 pydantic-core==2.27.2
 httpx==0.28.1
