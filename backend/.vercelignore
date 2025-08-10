@@ -76,9 +76,9 @@ Desktop.ini
 # Linux
 *~
 
-# Alembic
-alembic/versions/*.py
-!alembic/versions/__init__.py
+# Alembic - not needed for serverless deployment
+alembic/
+alembic.ini
 
 # 备份文件
 *.bak
